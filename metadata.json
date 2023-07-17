@@ -2,9 +2,11 @@
   "name": "jmckenzie-netplan",
   "version": "0.1.0",
   "author": "James McKenzie",
-  "summary": "",
+  "summary": "Manage netplan via Puppet",
   "license": "Apache-2.0",
-  "source": "",
+  "source": "https://github.com/jps-help/puppet-netplan",
+  "project_page": "https://github.com/jps-help/puppet-netplan",
+  "issues_url": "https://github.com/jps-help/puppet-netplan",
   "dependencies": [
 
   ],

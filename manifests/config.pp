@@ -8,7 +8,7 @@ define netplan::config (
   Enum['present','absent'] $ensure = 'present',
   String $file_name = $title,
   Integer $priority = 90,
-  Stdlib::Absolutepath $file = "/etc/netplan/${priority}-${name}",
+  Stdlib::Absolutepath $file = "/etc/netplan/${priority}-${file_name}.yaml",
   String $file_mode = '0600',
   Hash $settings = {},
 ) {
@@ -16,6 +16,6 @@ define netplan::config (
     ensure  => 'file',
     mode    => $file_mode,
     content => to_yaml($settings),
-    notify  => Exec['netplan_apply'],
+    notify  => Exec['netplan_cmd'],
   }
 }
