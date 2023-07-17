@@ -1,9 +1,40 @@
-# @summary A short summary of the purpose of this defined type.
+# @summary Generate netplan YAML files
 #
-# A description of what this defined type does
+# Create netplan YAML files from a Hash of data.
 #
-# @example
-#   netplan::config { 'namevar': }
+# @example Basic config
+#   netplan::config { 'example-config': 
+#     settings => {
+#       network => {
+#         version => 2,
+#         renderer => networkd,
+#         ethernets => {
+#           eth0 => {
+#             dhcp4 => true,
+#           },
+#         },
+#       },
+#     },
+#   }
+#
+# @param ensure
+#   Ensure presence/absence of the resource
+#
+# @param file_name
+#   The filename to use for the generated YAML file
+#
+# @param priority
+#   The number prefixed to the generated YAML file
+#
+# @param file
+#   The absolute path of the genrated YAML file
+#
+# @param file_mode
+#   The file permissions for the generated YAML file
+#
+# @param settings
+#   A hash of netplan settings to be included in the generated YAML file
+#
 define netplan::config (
   Enum['present','absent'] $ensure = 'present',
   String $file_name = $title,
@@ -13,7 +44,7 @@ define netplan::config (
   Hash $settings = {},
 ) {
   file { $file:
-    ensure  => 'file',
+    ensure  => $ensure,
     mode    => $file_mode,
     content => to_yaml($settings),
     notify  => Exec['netplan_cmd'],

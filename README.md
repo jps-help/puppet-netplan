@@ -1,11 +1,4 @@
 # netplan
-
-Welcome to your new module. A short overview of the generated parts can be found
-in the [PDK documentation][1].
-
-The README template below provides a starting point with details about what
-information to include in your README.
-
 ## Table of Contents
 
 1. [Description](#description)
@@ -19,99 +12,116 @@ information to include in your README.
 
 ## Description
 
-Briefly tell users why they might want to use your module. Explain what your
-module does and what kind of problems users can solve with it.
+This module is used to install and manage netplan.
 
-This should be a fairly short description helps the user decide if your module
-is what they want.
+Since netplan configuration files are simple YAML documents, the module provides a simple 1-to-1 mapping from a Puppet hash to netplan YAML.
 
 ## Setup
 
-### What netplan affects **OPTIONAL**
+### What netplan affects
 
-If it's obvious what your module touches, you can skip this section. For
-example, folks can probably figure out that your mysql_instance module affects
-their MySQL instances.
-
-If there's more that they should know about, though, this is the place to
-mention:
-
-* Files, packages, services, or operations that the module will alter, impact,
-  or execute.
-* Dependencies that your module automatically installs.
-* Warnings or other important notices.
-
-### Setup Requirements **OPTIONAL**
-
-If your module requires anything extra before setting up (pluginsync enabled,
-another module, etc.), mention it here.
-
-If your most recent release breaks compatibility or requires particular steps
-for upgrading, you might want to include an additional "Upgrading" section here.
+- Netplan YAML files under `/etc/netplan/`
 
 ### Beginning with netplan
-
-The very basic steps needed for a user to get the module up and running. This
-can include setup steps, if necessary, or it can be an example of the most basic
-use of the module.
-
+To get started with netplan, you simply need to include the main class
+```
+include netplan
+```
 ## Usage
+This module is best used by supplying data via Hiera. Generating netplan YAML files with resource statements, although possible, can result in very complex manifests.
 
-Include usage examples for common use cases in the **Usage** section. Show your
-users how to use your module to solve problems, and be sure to include code
-examples. Include three to five examples of the most important or common tasks a
-user can accomplish with your module. Show users how to accomplish more complex
-tasks that involve different types, classes, and functions working in tandem.
-
-## Reference
-
-This section is deprecated. Instead, add reference information to your code as
-Puppet Strings comments, and then use Strings to generate a REFERENCE.md in your
-module. For details on how to add code comments and generate documentation with
-Strings, see the [Puppet Strings documentation][2] and [style guide][3].
-
-If you aren't ready to use Strings yet, manually create a REFERENCE.md in the
-root of your module directory and list out each of your module's classes,
-defined types, facts, functions, Puppet tasks, task plans, and resource types
-and providers, along with the parameters for each.
-
-For each element (class, defined type, function, and so on), list:
-
-* The data type, if applicable.
-* A description of what the element does.
-* Valid values, if the data type doesn't make it obvious.
-* Default value, if any.
-
-For example:
+The below example shows both methods, although it's strongly recommended to just use Hiera to form your netplan config.
+### Basic usage
+Make sure to include netplan somewhere in your manifest. By default, this will only ensure that netplan is installed.
+```
+include netplan
 
 ```
-### `pet::cat`
-
-#### Parameters
-
-##### `meow`
-
-Enables vocalization in your cat. Valid options: 'string'.
-
-Default: 'medium-loud'.
+Provide Hiera data to build your inteneded netplan YAML file.
 ```
+netplan::configs:
+  example-config:
+    settings:
+      network:
+        version: 2
+        renderer: networkd
+        ethernets:
+          eth0:
+            dhcp4: true
+```
+And here is the same config using a `netplan::config` resource instead
+```
+netplan::config { 'example-config': 
+  settings => {
+    network => {
+      version => 2,
+      renderer => networkd,
+      ethernets => {
+        eth0 => {
+          dhcp4 => true,
+        },
+      },
+    },
+  },
+}
+```
+### Purge un-managed configs
+You can control whether to purge un-managed configs under `/etc/netplan/` using the main class.
+#### Resource-like declaration
+```
+class {'netplan':
+  purge_configs => true,
+}
 
+```
+#### Hiera
+```
+netplan::purge_configs: true
+```
+### Control priority of netplan YAML files
+Netplan reads all YAML files under `/etc/netplan/` and merges them to generate a single config. The order in which they are read determines the final config, if the same key appears in multiple files.
+
+You can change the priority of a generated file as follows:
+```
+netplan::configs:
+  example-config:
+    priority: 10
+    settings:
+      network:
+        version: 2
+        renderer: networkd
+  example-config-2:
+    priority: 20
+    settings:
+      network:
+        ethernets:
+          eth0:
+            dhcp4: true
+```
+The above will result in the following under `/etc/netplan/`
+- 10-example-config.yaml
+- 20-example-config-2.yaml
+
+### Disable automatic netplan apply
+By default, this module will run `netplan apply` once resources have been applied. This may not be desirable in some situations.
+You can disable this with the following
+```
+class { 'netplan':
+  apply => false,
+}
+```
+Or do the same using Hiera
+```
+netplan::apply: false
+``` 
+Disabling `netplan::apply` will cause `netplan get` to be run instead. This acts as a form of validation check even though the config isn't applied immediately.
+
+Please note that even when `netplan::apply` is disabled, to netplan YAML is still written to `/etc/netplan/`, so a reboot could cause network loss if the config is wrong.
 ## Limitations
 
-In the Limitations section, list any incompatibilities, known issues, or other
-warnings.
+This module doesn't perform any comprehensive validation for the generated netplan YAML. It can only ensure the generated file is in YAML syntax. 
+***i.e.*** The ownus is on the sysadmin to ensure the generated config is valid for use with netplan.
 
 ## Development
 
-In the Development section, tell other users the ground rules for contributing
-to your project and how they should submit their work.
-
-## Release Notes/Contributors/Etc. **Optional**
-
-If you aren't using changelog, put your release notes here (though you should
-consider using changelog). You can also add any additional sections you feel are
-necessary or important to include here. Please use the `##` header.
-
-[1]: https://puppet.com/docs/pdk/latest/pdk_generating_modules.html
-[2]: https://puppet.com/docs/puppet/latest/puppet_strings.html
-[3]: https://puppet.com/docs/puppet/latest/puppet_strings_style.html
+Please submit your contributions and issues to GitHub: https://github.com/jps-help/puppet-netplan
