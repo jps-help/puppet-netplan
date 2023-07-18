@@ -97,13 +97,11 @@ Create netplan YAML files from a Hash of data.
 ```puppet
 netplan::config { 'example-config':
   settings => {
-    network => {
-      version => 2,
-      renderer => networkd,
-      ethernets => {
-        eth0 => {
-          dhcp4 => true,
-        },
+    version => 2,
+    renderer => networkd,
+    ethernets => {
+      eth0 => {
+        dhcp4 => true,
       },
     },
   },

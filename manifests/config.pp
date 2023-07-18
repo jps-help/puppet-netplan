@@ -5,13 +5,11 @@
 # @example Basic config
 #   netplan::config { 'example-config': 
 #     settings => {
-#       network => {
-#         version => 2,
-#         renderer => networkd,
-#         ethernets => {
-#           eth0 => {
-#             dhcp4 => true,
-#           },
+#       version => 2,
+#       renderer => networkd,
+#       ethernets => {
+#         eth0 => {
+#           dhcp4 => true,
 #         },
 #       },
 #     },
@@ -46,7 +44,7 @@ define netplan::config (
   file { $file:
     ensure  => $ensure,
     mode    => $file_mode,
-    content => to_yaml($settings),
+    content => to_yaml({ network => $settings }),
     notify  => Exec['netplan_cmd'],
   }
 }
