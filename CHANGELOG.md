@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## Release 0.1.2
 ### Changed
 - `netplan::config` resources include the top-level `network` key automatically [BREAKING]
   - Users will need to remove the top-level `network` key from their existing netplan hash/hiera 
