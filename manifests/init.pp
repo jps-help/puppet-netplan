@@ -10,6 +10,12 @@
 #     purge_configs => true,
 #   }
 #
+# @example Purge un-managed files, but ignore a given pattern
+#   class { netplan:
+#     purge_configs => true,
+#     purge_ignore  => '90-NM*'
+#   }
+#
 # @param package_dependencies
 #   List of packages to install
 #
@@ -22,6 +28,10 @@
 # @param purge_configs
 #   Whether to purge un-managed netplan YAML files under /etc/netplan
 #
+# @param purge_ignore
+#   Match files to ignore when purging configs under /etc/netplan.
+#   Uses the `ignore` attribute of the native puppet `file` resource.
+#
 # @param configs
 #   An optional hash of netplan configurations supplied via hiera
 #
@@ -30,6 +40,7 @@ class netplan (
   Boolean $manage_dependencies = true,
   Boolean $apply = true,
   Boolean $purge_configs = false,
+  Optional[String] $purge_ignore = undef,
   Optional[Hash] $configs = undef,
 ) {
   case $apply {
@@ -49,6 +60,7 @@ class netplan (
   file { '/etc/netplan':
     ensure  => directory,
     purge   => $purge_configs,
+    ignore  => $purge_ignore,
     recurse => true,
   }
   if $configs {
