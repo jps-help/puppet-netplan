@@ -30,6 +30,7 @@ class netplan (
   Boolean $manage_dependencies = true,
   Boolean $apply = true,
   Boolean $purge_configs = false,
+  Optional[String] $purge_ignore = undef,
   Optional[Hash] $configs = undef,
 ) {
   case $apply {
@@ -49,6 +50,7 @@ class netplan (
   file { '/etc/netplan':
     ensure  => directory,
     purge   => $purge_configs,
+    ignore  => $purge_ignore,
     recurse => true,
   }
   if $configs {
