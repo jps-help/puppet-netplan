@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 1.0.0
+### Added
+- Add `purge_ignore` parameter for fine-grained control over purging un-managed configs
+
 ## Release 0.1.3
 ### Added
 - Allow puppetlabs/stdlib 9.x.x
