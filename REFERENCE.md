@@ -10,7 +10,7 @@
 
 ### Defined types
 
-* [`netplan::config`](#netplanconfig): Generate netplan YAML files
+* [`netplan::config`](#netplan--config): Generate netplan YAML files
 
 ## Classes
 
@@ -34,17 +34,27 @@ class { netplan:
 }
 ```
 
+##### Purge un-managed files, but ignore a given pattern
+
+```puppet
+class { netplan:
+  purge_configs => true,
+  purge_ignore  => '90-NM*'
+}
+```
+
 #### Parameters
 
 The following parameters are available in the `netplan` class:
 
-* [`package_dependencies`](#package_dependencies)
-* [`manage_dependencies`](#manage_dependencies)
-* [`apply`](#apply)
-* [`purge_configs`](#purge_configs)
-* [`configs`](#configs)
+* [`package_dependencies`](#-netplan--package_dependencies)
+* [`manage_dependencies`](#-netplan--manage_dependencies)
+* [`apply`](#-netplan--apply)
+* [`purge_configs`](#-netplan--purge_configs)
+* [`purge_ignore`](#-netplan--purge_ignore)
+* [`configs`](#-netplan--configs)
 
-##### <a name="package_dependencies"></a>`package_dependencies`
+##### <a name="-netplan--package_dependencies"></a>`package_dependencies`
 
 Data type: `Array`
 
@@ -52,41 +62,50 @@ List of packages to install
 
 Default value: `['netplan.io']`
 
-##### <a name="manage_dependencies"></a>`manage_dependencies`
+##### <a name="-netplan--manage_dependencies"></a>`manage_dependencies`
 
 Data type: `Boolean`
 
 Whether to install the list of package dependencies or not
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="apply"></a>`apply`
+##### <a name="-netplan--apply"></a>`apply`
 
 Data type: `Boolean`
 
 Whether to apply the netplan configuration during the agent run or not
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="purge_configs"></a>`purge_configs`
+##### <a name="-netplan--purge_configs"></a>`purge_configs`
 
 Data type: `Boolean`
 
 Whether to purge un-managed netplan YAML files under /etc/netplan
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="configs"></a>`configs`
+##### <a name="-netplan--purge_ignore"></a>`purge_ignore`
+
+Data type: `Optional[String]`
+
+Match files to ignore when purging configs under /etc/netplan.
+Uses the `ignore` attribute of the native puppet `file` resource.
+
+Default value: `undef`
+
+##### <a name="-netplan--configs"></a>`configs`
 
 Data type: `Optional[Hash]`
 
 An optional hash of netplan configurations supplied via hiera
 
-Default value: ``undef``
+Default value: `undef`
 
 ## Defined types
 
-### <a name="netplanconfig"></a>`netplan::config`
+### <a name="netplan--config"></a>`netplan::config`
 
 Create netplan YAML files from a Hash of data.
 
@@ -112,14 +131,14 @@ netplan::config { 'example-config':
 
 The following parameters are available in the `netplan::config` defined type:
 
-* [`ensure`](#ensure)
-* [`file_name`](#file_name)
-* [`priority`](#priority)
-* [`file`](#file)
-* [`file_mode`](#file_mode)
-* [`settings`](#settings)
+* [`ensure`](#-netplan--config--ensure)
+* [`file_name`](#-netplan--config--file_name)
+* [`priority`](#-netplan--config--priority)
+* [`file`](#-netplan--config--file)
+* [`file_mode`](#-netplan--config--file_mode)
+* [`settings`](#-netplan--config--settings)
 
-##### <a name="ensure"></a>`ensure`
+##### <a name="-netplan--config--ensure"></a>`ensure`
 
 Data type: `Enum['present','absent']`
 
@@ -127,7 +146,7 @@ Ensure presence/absence of the resource
 
 Default value: `'present'`
 
-##### <a name="file_name"></a>`file_name`
+##### <a name="-netplan--config--file_name"></a>`file_name`
 
 Data type: `String`
 
@@ -135,7 +154,7 @@ The filename to use for the generated YAML file
 
 Default value: `$title`
 
-##### <a name="priority"></a>`priority`
+##### <a name="-netplan--config--priority"></a>`priority`
 
 Data type: `Integer`
 
@@ -143,7 +162,7 @@ The number prefixed to the generated YAML file
 
 Default value: `90`
 
-##### <a name="file"></a>`file`
+##### <a name="-netplan--config--file"></a>`file`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -151,7 +170,7 @@ The absolute path of the genrated YAML file
 
 Default value: `"/etc/netplan/${priority}-${file_name}.yaml"`
 
-##### <a name="file_mode"></a>`file_mode`
+##### <a name="-netplan--config--file_mode"></a>`file_mode`
 
 Data type: `String`
 
@@ -159,7 +178,7 @@ The file permissions for the generated YAML file
 
 Default value: `'0600'`
 
-##### <a name="settings"></a>`settings`
+##### <a name="-netplan--config--settings"></a>`settings`
 
 Data type: `Hash`
 
