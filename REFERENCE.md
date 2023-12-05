@@ -136,6 +136,7 @@ The following parameters are available in the `netplan::config` defined type:
 * [`priority`](#-netplan--config--priority)
 * [`file`](#-netplan--config--file)
 * [`file_mode`](#-netplan--config--file_mode)
+* [`header`](#-netplan--config--header)
 * [`settings`](#-netplan--config--settings)
 
 ##### <a name="-netplan--config--ensure"></a>`ensure`
@@ -177,6 +178,14 @@ Data type: `String`
 The file permissions for the generated YAML file
 
 Default value: `'0600'`
+
+##### <a name="-netplan--config--header"></a>`header`
+
+Data type: `String`
+
+The file header for the generated YAML file
+
+Default value: `'# This file is managed by Puppet. DO NOT EDIT.'`
 
 ##### <a name="-netplan--config--settings"></a>`settings`
 
