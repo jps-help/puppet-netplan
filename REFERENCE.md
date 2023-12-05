@@ -157,9 +157,9 @@ Default value: `$title`
 
 ##### <a name="-netplan--config--priority"></a>`priority`
 
-Data type: `Integer`
+Data type: `Variant[String, Integer[0]]`
 
-The number prefixed to the generated YAML file
+The string/number prefixed to the generated YAML file
 
 Default value: `90`
 

@@ -22,7 +22,7 @@
 #   The filename to use for the generated YAML file
 #
 # @param priority
-#   The number prefixed to the generated YAML file
+#   The string/number prefixed to the generated YAML file
 #
 # @param file
 #   The absolute path of the genrated YAML file
@@ -39,7 +39,7 @@
 define netplan::config (
   Enum['present','absent'] $ensure = 'present',
   String $file_name = $title,
-  Integer $priority = 90,
+  Variant[String, Integer[0]] $priority = 90,
   Stdlib::Absolutepath $file = "/etc/netplan/${priority}-${file_name}.yaml",
   String $file_mode = '0600',
   String $header = '# This file is managed by Puppet. DO NOT EDIT.',
