@@ -37,7 +37,12 @@ Please note, the `netplan::config` resource automatically adds the top-level `ne
 Make sure to include netplan somewhere in your manifest. By default, this will only ensure that netplan is installed.
 ```
 include netplan
-
+```
+You may want to merge netplan::configs from multiple hiera YAML files. Do this by including the deep merge lookup option
+```
+lookup_options:
+  netplan::configs:
+    merge: 'deep'
 ```
 Provide Hiera data to build your inteneded netplan YAML file.
 ```
@@ -70,12 +75,14 @@ You can control whether to purge un-managed configs under `/etc/netplan/` using 
 ```
 class {'netplan':
   purge_configs => true,
+  purge_ignore  => '90-NM*', # Optionally ignore specific patterns when purging
 }
 
 ```
 #### Hiera
 ```
 netplan::purge_configs: true
+netplan::purge_ignore: '90-NM*' # Optionally ignore specific patterns when purging
 ```
 ### Control priority of netplan YAML files
 Netplan reads all YAML files under `/etc/netplan/` and merges them to generate a single config. The order in which they are read determines the final config, if the same key appears in multiple files.
