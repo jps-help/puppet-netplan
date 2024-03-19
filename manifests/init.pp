@@ -55,7 +55,11 @@ class netplan (
     }
   }
   if $manage_dependencies == true {
-    ensure_packages($package_dependencies)
+    $package_dependencies.each | String $package | {
+      package { $package:
+        ensure => 'present',
+      }
+    }
   }
   file { '/etc/netplan':
     ensure  => directory,
@@ -65,7 +69,9 @@ class netplan (
   }
   if $configs {
     $configs.each |String $name, Hash $config| {
-      ensure_resource('netplan::config', $name, $config)
+      netplan::config { $name:
+        * => $config,
+      }
     }
   }
   exec { 'netplan_cmd':
