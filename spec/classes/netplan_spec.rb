@@ -13,30 +13,37 @@ describe 'netplan' do
       it { is_expected.to compile.with_all_deps }
       it { is_expected.to contain_package('netplan.io').with_ensure('present') }
       it { is_expected.to contain_file('/etc/netplan') }
-      
       context 'Purge un-managed' do
         let(:params) do
-          super().merge({
-            'purge_configs' => true,
-            'purge_ignore'  => '90-NM*'
-          })
+          super().merge(
+            {
+              'purge_configs' => true,
+              'purge_ignore' => '90-NM*',
+            },
+          )
         end
-        it { is_expected.to contain_file('/etc/netplan').with(
+
+        it {
+          is_expected.to contain_file('/etc/netplan').with(
           'purge' => params['purge_configs'],
           'ignore' => params['purge_ignore'],
-        )}
+        )
+        }
         context 'Generate configs from hiera' do
           let(:params) do
-            super().merge({
-              'configs' => {
-                'example1' => {},
-                'example2' => {},
-                'example3' => {},
-              }
-            })
+            super().merge(
+              {
+                'configs' => {
+                  'example1' => {},
+                  'example2' => {},
+                  'example3' => {},
+                },
+              },
+            )
           end
+
           it {
-            params['configs'].each do | name, hash |
+            params['configs'].each do |name, _hash|
               is_expected.to contain_file("/etc/netplan/90-#{name}.yaml").that_notifies('Exec[netplan_cmd]')
             end
           }
