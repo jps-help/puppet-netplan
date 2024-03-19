@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 2.0.1
+### Added
+- Puppet CI/CD workflows
+
+### Changed
+- Replace stdlib functions with native puppet resource iteration
+
 ## Release 2.0.0
 ### Breaking
 - Restrict `netplan::config` `priority` integers to positive values only - [#11](https://github.com/jps-help/puppet-netplan/pull/11)
