@@ -27,3 +27,4 @@ jobs:
     steps:
       - name: Run rspec tests
         run: rake -f /Rakefile spec
+        working-directory: /repo
