@@ -1,6 +1,6 @@
 {
   "name": "jmckenzie-netplan",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "author": "James McKenzie",
   "summary": "Manage netplan via Puppet",
   "license": "Apache-2.0",
@@ -18,7 +18,8 @@
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
         "11",
-        "12"
+        "12",
+        "13"
       ]
     },
     {
@@ -26,7 +27,8 @@
       "operatingsystemrelease": [
         "18.04",
         "20.04",
-        "22.04"
+        "22.04",
+        "24.04"
       ]
     }
   ],

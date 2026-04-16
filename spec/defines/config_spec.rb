@@ -8,13 +8,10 @@ describe 'netplan::config' do
   let(:params) do
     {}
   end
-
   on_supported_os.each do |os, os_facts|
     context "on #{os}" do
       let(:facts) { os_facts }
-
       it { is_expected.to compile }
-
       context 'simple_config' do
         let(:title) { 'simple_config' }
         let(:params) do
@@ -34,9 +31,7 @@ describe 'netplan::config' do
             },
           )
         end
-
-        it { is_expected.to contain_file("/etc/netplan/#{params['priority']}-#{title}.yaml").with_mode('0600') }
-        it { is_expected.to contain_file("/etc/netplan/#{params['priority']}-#{title}.yaml").that_notifies('Exec[netplan_cmd]') }
+        it { is_expected.to contain_file("/etc/netplan/#{params['priority']}-#{title}.yaml").with_mode('0600').that_notifies('Exec[netplan_cmd]') }
       end
     end
   end

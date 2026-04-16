@@ -9,7 +9,6 @@ describe 'netplan' do
       let(:params) do
         {}
       end
-
       it { is_expected.to compile.with_all_deps }
       it { is_expected.to contain_package('netplan.io').with_ensure('present') }
       it { is_expected.to contain_file('/etc/netplan') }
@@ -41,12 +40,10 @@ describe 'netplan' do
               },
             )
           end
-
-          it {
-            params['configs'].each do |name, _hash|
-              is_expected.to contain_file("/etc/netplan/90-#{name}.yaml").that_notifies('Exec[netplan_cmd]')
-            end
-          }
+          it { is_expected.to contain_netplan__config('example1').with_ensure('present') }
+          it { is_expected.to contain_netplan__config('example2').with_ensure('present') }
+          it { is_expected.to contain_netplan__config('example3').with_ensure('present') }
+          it { is_expected.to contain_exec('netplan_cmd').with(refreshonly: true) }
         end
       end
     end
