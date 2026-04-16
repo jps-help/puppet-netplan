@@ -10,7 +10,7 @@ jobs:
   puppet-parser-validate:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/voxpupuli/openvoxserver:8
+      image: ghcr.io/openvoxproject/openvoxserver
       volumes:
         - .:/repo
       options: --cpus 1
@@ -20,7 +20,7 @@ jobs:
   rspec-tests:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/voxpupuli/voxbox:8
+      image: docker.io/voxpupuli/voxbox:8
       volumes:
         - .:/repo
       options: --cpus 1
