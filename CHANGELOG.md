@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 2.1.0
+## Added
+- Support for new OS versions
+  - Debian 13
+  - Ubuntu 24.04 LTS
+
+## Changed
+- Fix spec tests and expand coverage
+
+## Breaking
+- Drop `puppet` requirement and migrate to `openvox`
+
 ## Release 2.0.1
 ### Added
 - Puppet CI/CD workflows
