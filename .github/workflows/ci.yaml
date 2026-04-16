@@ -20,10 +20,10 @@ jobs:
   rspec-tests:
     runs-on: ubuntu-latest
     container:
-      image: docker.io/voxpupuli/voxbox:8
+      image: ghcr.io/voxpupuli/voxbox:8
       volumes:
         - .:/repo
       options: --cpus 1
     steps:
       - name: Run rspec tests
-        run: spec
+        run: rake -f /Rakefile spec
