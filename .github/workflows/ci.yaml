@@ -11,20 +11,19 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/openvoxproject/openvoxserver
-      volumes:
-        - .:/repo
       options: --cpus 1
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v6
       - name: Run puppet parser validate
-        run: /opt/puppetlabs/bin/puppet parser validate --verbose /repo/
+        run: /opt/puppetlabs/bin/puppet parser validate --verbose ./
   rspec-tests:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/voxpupuli/voxbox:8
-      volumes:
-        - .:/repo
       options: --cpus 1
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v6
       - name: Run rspec tests
         run: rake -f /Rakefile spec
-        working-directory: /repo
